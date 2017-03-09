@@ -23,13 +23,13 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert(['name' => 'Kate','email' => 'k.l.hutton@hudstudent.ac.uk','password' => bcrypt('password'));
-        DB::table('users')->insert(['name' => 'Yousef','email' => 'y.miandad@hudstudent.ac.uk','password' => bcrypt('letmein'));
-        DB::table('users')->insert(['name' => 'Sunil','email' => 's.laxman@hudstudent.ac.uk','password' => bcrypt('password2'));
+        DB::table('users')->insert(['name' => 'Kate','email' => 'k.l.hutton@hudstudent.ac.uk','password' => bcrypt('password')]);
+        DB::table('users')->insert(['name' => 'Yousef','email' => 'y.miandad@hudstudent.ac.uk','password' => bcrypt('letmein')]);
+        DB::table('users')->insert(['name' => 'Sunil','email' => 's.laxman@hudstudent.ac.uk','password' => bcrypt('password2')]);
     }
 }
 ```
-
+* Open the DatabaseSeeder and add a call to the UsersTableSeeder
 * Next, re-run the migration and re-seed the database
 
 ```

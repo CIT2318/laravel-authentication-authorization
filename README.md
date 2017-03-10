@@ -242,14 +242,37 @@ class FilmPolicy
 ```
 
 * Next we need register the policy. Open *AuthServiceProvider.php*
-* Add the FilmPolicy to the array of policies
+* Add the FilmPolicy to the array of policies/ You also need to add some *use* statements to import the Film and FilmPolicy classes. 
 ```
-...
+namespace App\Providers;
+
+use App\Film; //import the Film model 
+use App\Policies\FilmPolicy; //import the Film policy
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+
+class AuthServiceProvider extends ServiceProvider
+{
+    /**
+     * The policy mappings for the application.
+     *
+     * @var array
+     */
     protected $policies = [
         'App\Model' => 'App\Policies\ModelPolicy',
-        Film::class => FilmPolicy::class,
+        Film::class => FilmPolicy::class //add film policy
     ];
-...
+    /**
+     * Register any authentication / authorization services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->registerPolicies();
+
+    }
+}
 ```
 
 ###Authorizing Actions

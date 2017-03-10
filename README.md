@@ -242,7 +242,7 @@ class FilmPolicy
 ```
 
 * Next we need register the policy. Open *AuthServiceProvider.php*
-* Add the FilmPolicy to the array of policies/ You also need to add some *use* statements to import the Film and FilmPolicy classes. 
+* Add the FilmPolicy to the array of policies. You also need to add some *use* statements to import the Film and FilmPolicy classes. 
 ```
 namespace App\Providers;
 

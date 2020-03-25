@@ -1,10 +1,10 @@
 # Authentication and Authorization in Laravel
-The following provides a brief walkthrough on some of Laravel's authentication and authorization features. It assumes you have aready completed the first two Laravel practicals. 
+The following provides a brief walkthrough on some of Laravel's authentication and authorization features. It assumes you have aready completed the first two Laravel practicals.
 
-Laravel offers 'out of the box' authentication (https://laravel.com/docs/5.5/authentication). With some simple artisan commands it will generate an entire login/registration system. We will take a more hands-on approach but still use many of the framework's authentication features to help us. 
+Laravel offers 'out of the box' authentication (https://laravel.com/docs/authentication). With some simple artisan commands it will generate an entire login/registration system. We will take a more hands-on approach but still use many of the framework's authentication features to help us.
 
 ## Creating a simple login system
-Laravel automatically generates a *users* table for us. If you look in phpMyAdmin you should be able to see it. First we will populate this with some users. 
+Laravel automatically generates a *users* table for us. If you look in phpMyAdmin you should be able to see it. First we will populate this with some users.
 * Using Artisan create a users table seeder
 ```
 php artisan make:seeder UsersTableSeeder
@@ -36,7 +36,7 @@ class UsersTableSeeder extends Seeder
 php artisan migrate:refresh --seed
 ```
 
-* Check in phpMyAdmin, you should see some data in your users table. 
+* Check in phpMyAdmin, you should see some data in your users table.
 
 * We'll make a new controller to handle logging in, enter the following artisan command
 
@@ -106,22 +106,22 @@ There are a couple of things we haven't seen before
  ```
  Auth::attempt(['email' => $request->email, 'password' => $request->password])
  ```
- The *attempt* method will check the users table for the email and password see https://laravel.com/docs/5.5/authentication#authenticating-users. 
+ The *attempt* method will check the users table for the email and password see https://laravel.com/docs/authentication#authenticating-users.
 
 * We can work with sessions using the session helper, this is made available via the $request object
  ```
  $request->session()->flash('loginError', "Those details aren't correct");
  ```
- 
-* Flash data is only stored until the next request (https://laravel.com/docs/5.5/session#flash-data). This message will be displayed above the login form if the user enters the wrong details (have a look back at *login.blade.php*)
 
-* Test this works. If the user enters correct login details they should be taken to the list of all the films. If they don't, they will be re-directed back to the login page. 
+* Flash data is only stored until the next request (https://laravel.com/docs/session#flash-data). This message will be displayed above the login form if the user enters the wrong details (have a look back at *login.blade.php*)
 
-* Even though the login works, users are still able to access pages without logging in if they enter a correct url e.g.http://localhost/laravel-project/public/list . 
+* Test this works. If the user enters correct login details they should be taken to the list of all the films. If they don't, they will be re-directed back to the login page.
 
-There are a number of different ways of protecting routes in Laravel see (https://laravel.com/docs/5.5/authentication#protecting-routes). In this example we will protect the routes using a controller.  For now let's assume we don't want the users to access any part of the site unless they are logged in. 
+* Even though the login works, users are still able to access pages without logging in if they enter a correct url e.g.http://localhost/laravel-project/public/list .
 
-* Open the FilmController. Add the following constructor function 
+There are a number of different ways of protecting routes in Laravel see (https://laravel.com/docs/authentication#protecting-routes). In this example we will protect the routes using a controller.  For now let's assume we don't want the users to access any part of the site unless they are logged in.
+
+* Open the FilmController. Add the following constructor function
 
 ```
 function __construct()
@@ -130,32 +130,32 @@ function __construct()
 }
 ```
 
-Test this works. You may have to open a new web browser window. Try and access a route e.g. http://localhost/cit2318/laravel/public/all without logging in first. 
+Test this works. You may have to open a new web browser window. Try and access a route e.g. http://localhost/cit2318/laravel/public/all without logging in first.
 
 ### Giving the user some feedback
 Next open up *master.blade.php*. Add the following after the list of links
 ```
 <div>Logged in as : {{Auth::user()->name}}</div>
 ```
-Again test this works. Once the user has logged in their name should be displayed on every page of the site. 
+Again test this works. Once the user has logged in their name should be displayed on every page of the site.
 
 ## Logging out
 The Auth facade also provides a logout method
 ```
 Auth::logout();
 ```
-* Add a logout method to the LoginController that uses this code and then redirects the user to the login form. 
+* Add a logout method to the LoginController that uses this code and then redirects the user to the login form.
 * Add a logout route in web.php
 * Add a logout link to the list of links in *master.blade.php*
-* Test this works. 
+* Test this works.
 
 ## Authorization
 Authorization is all about specifying who is allowed to perform certain actions on our site. In our simple application:
 * All users (as long as they are logged in) can view films
-* If the user is an administrator they also add and delete films 
+* If the user is an administrator they also add and delete films
 
 ### Specifying roles
-A very simple way of specifying different roles for users is by adding an additional *role* column in the *users* table. A value of 1 will indicate a regular user, a value of 2 will indicate an administrator. 
+A very simple way of specifying different roles for users is by adding an additional *role* column in the *users* table. A value of 1 will indicate a regular user, a value of 2 will indicate an administrator.
 
 Open the *users* table migration and add an additional column for the user's role.
 ```
@@ -196,8 +196,8 @@ class UsersTableSeeder extends Seeder
 
 ```
 
-* Laravel allows us to specify actions and then determine if a user is allowed to perform that action. 
-* One way of doing this is to use a policy (https://laravel.com/docs/5.5/authorization#creating-policies) . Policies allow us to organise authorization around a given model (in our case the Film model).
+* Laravel allows us to specify actions and then determine if a user is allowed to perform that action.
+* One way of doing this is to use a policy (https://laravel.com/docs/authorization#creating-policies) . Policies allow us to organise authorization around a given model (in our case the Film model).
 
 * Instruct artisan to generate a Film policy for us
 
@@ -241,11 +241,11 @@ class FilmPolicy
 ```
 
 * Next we need register the policy. From the *providers* folder open *AuthServiceProvider.php*
-* Add the FilmPolicy to the array of policies. You also need to add some *use* statements to import the Film and FilmPolicy classes. 
+* Add the FilmPolicy to the array of policies. You also need to add some *use* statements to import the Film and FilmPolicy classes.
 ```
 namespace App\Providers;
 
-use App\Film; //import the Film model 
+use App\Film; //import the Film model
 use App\Policies\FilmPolicy; //import the Film policy
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -275,7 +275,7 @@ class AuthServiceProvider extends ServiceProvider
 ```
 
 ### Authorizing Actions
-Now the policy is set up we can use it to restrict access to parts of the site 
+Now the policy is set up we can use it to restrict access to parts of the site
 * Open *master.blade.php*
 * Modify the list of hyperlinks so it looks like the following
 ```
@@ -291,23 +291,21 @@ Now the policy is set up we can use it to restrict access to parts of the site
 ...           
 ```
 
-The *@can* directive specifies that only those users authorised to perform the *create* action (user's role is equal to 2) can view the links to delete films and add film. 
+The *@can* directive specifies that only those users authorised to perform the *create* action (user's role is equal to 2) can view the links to delete films and add film.
 
-* Test this works. If you are signed is as *Yousef* you should see the links. If you are signed in as anyone else you shouldn't. 
+* Test this works. If you are signed is as *Yousef* you should see the links. If you are signed in as anyone else you shouldn't.
 
 Users will still be able to access routes directly by entering a valid url. To prevent this from happening open the *web.php* routes file. Add a call to 'middleware' to authorize access to certain routes e.g.
 
 ```
 Route::get('create', 'FilmController@create')->middleware('can:create,App\Film');
 ```
-* Middleware is code that is run before reaching our controllers (https://laravel.com/docs/5.5/middleware). 
+* Middleware is code that is run before reaching our controllers (https://laravel.com/docs/middleware).
 * Test this works. Login in as Kate and try to access the *create* route. You should get an authorization error.  
 
 
 ## On Your Own
 * The authentication system we have built is very simple. Try the following
  * Adding validation to the form e.g. has the user entered a valid email address
- * Allow users to register for the site. 
-* There is also a lot more to authorization in Laravel, see https://laravel.com/docs/5.5/authorization for full details. 
-
-
+ * Allow users to register for the site.
+* There is also a lot more to authorization in Laravel, see https://laravel.com/docs/authorization for full details.
